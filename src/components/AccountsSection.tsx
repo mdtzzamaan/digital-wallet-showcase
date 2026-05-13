@@ -1,4 +1,4 @@
-import { ArrowUpRight, Plus, Eye, EyeOff } from "lucide-react";
+import { ArrowUpRight, Plus, Eye, EyeOff, Wallet } from "lucide-react";
 import { useState } from "react";
 
 type Account = {
@@ -6,10 +6,12 @@ type Account = {
   nickname: string;
   holder: string;
   currency: "USD" | "BDT";
+  symbol: string;
   balance: number;
   available: number;
   masked: string;
-  type: "PERSONAL" | "BUSINESS";
+  type?: string;
+  theme: "indigo" | "emerald" | "amber";
 };
 
 const accounts: Account[] = [
@@ -18,32 +20,61 @@ const accounts: Account[] = [
     nickname: "USD Account",
     holder: "Mr. Alex",
     currency: "USD",
+    symbol: "$",
     balance: 2180.31,
     available: 2180.31,
-    masked: "101056 •••• 7482",
-    type: "PERSONAL",
+    masked: "•••• 7482",
+    type: "Personal",
+    theme: "indigo",
   },
   {
     id: 1172,
     nickname: "Salary Debit",
     holder: "Edu Net",
     currency: "USD",
+    symbol: "$",
     balance: 31.01,
     available: 31.01,
-    masked: "101056 •••• 0868",
-    type: "BUSINESS",
+    masked: "•••• 0868",
+    type: "Business",
+    theme: "emerald",
   },
   {
     id: "e50168f1",
     nickname: "Tour Sri Lanka",
     holder: "Mr. Alex",
     currency: "BDT",
+    symbol: "৳",
     balance: 1131.0,
     available: 631.0,
-    masked: "222909 •••• 5935",
-    type: "PERSONAL",
+    masked: "•••• 5935",
+    theme: "amber",
   },
 ];
+
+const themes = {
+  indigo: {
+    bg: "linear-gradient(160deg, oklch(0.98 0.012 270) 0%, oklch(0.96 0.022 265) 100%)",
+    accent: "oklch(0.42 0.18 270)",
+    accentSoft: "oklch(0.92 0.05 270)",
+    ink: "oklch(0.22 0.06 270)",
+    mark: "oklch(0.42 0.18 270 / 0.08)",
+  },
+  emerald: {
+    bg: "linear-gradient(160deg, oklch(0.98 0.015 165) 0%, oklch(0.96 0.03 160) 100%)",
+    accent: "oklch(0.48 0.14 165)",
+    accentSoft: "oklch(0.92 0.06 165)",
+    ink: "oklch(0.24 0.05 165)",
+    mark: "oklch(0.48 0.14 165 / 0.08)",
+  },
+  amber: {
+    bg: "linear-gradient(160deg, oklch(0.985 0.018 85) 0%, oklch(0.96 0.04 75) 100%)",
+    accent: "oklch(0.58 0.16 60)",
+    accentSoft: "oklch(0.94 0.06 80)",
+    ink: "oklch(0.28 0.06 60)",
+    mark: "oklch(0.58 0.16 60 / 0.09)",
+  },
+};
 
 const fmt = (n: number, c: "USD" | "BDT") =>
   new Intl.NumberFormat("en-US", {
@@ -52,56 +83,97 @@ const fmt = (n: number, c: "USD" | "BDT") =>
     minimumFractionDigits: 2,
   }).format(n);
 
-function AccountCard({ a, hidden }: { a: Account; hidden: boolean }) {
-  const isUSD = a.currency === "USD";
+function WalletCard({ a, hidden }: { a: Account; hidden: boolean }) {
+  const t = themes[a.theme];
   return (
     <article
-      className="group relative shrink-0 w-[288px] h-[188px] rounded-2xl p-5 flex flex-col justify-between overflow-hidden transition-all duration-300 hover:-translate-y-1"
+      className="group relative shrink-0 w-[280px] rounded-3xl p-5 flex flex-col gap-6 overflow-hidden transition-all duration-300 hover:-translate-y-1"
       style={{
-        background: isUSD
-          ? "linear-gradient(135deg, var(--brand-midnight-deep), var(--brand-midnight))"
-          : "linear-gradient(135deg, oklch(0.22 0.04 260), oklch(0.32 0.06 250))",
-        color: "white",
+        background: t.bg,
+        border: `1px solid ${t.accentSoft}`,
         boxShadow:
-          "0 1px 0 rgba(255,255,255,0.06) inset, 0 20px 40px -20px rgba(15,15,74,0.45)",
+          "0 1px 0 rgba(255,255,255,0.8) inset, 0 12px 32px -16px rgba(20,20,40,0.12)",
       }}
     >
-      {/* glow */}
+      {/* watermark currency symbol */}
       <div
-        className="absolute -top-16 -right-16 w-56 h-56 rounded-full opacity-30 blur-3xl pointer-events-none"
-        style={{ background: "var(--brand-amber)" }}
-      />
+        className="absolute -right-4 -bottom-10 pointer-events-none select-none font-serif leading-none"
+        style={{
+          fontSize: "220px",
+          fontWeight: 600,
+          color: t.mark,
+          letterSpacing: "-0.05em",
+        }}
+        aria-hidden
+      >
+        {a.symbol}
+      </div>
 
-      <header className="relative flex items-start justify-between">
-        <div className="min-w-0">
-          <p className="text-[11px] uppercase tracking-[0.14em] text-white/55 mono">
-            {a.type}
-          </p>
-          <h3 className="mt-1 text-[15px] font-medium truncate">{a.nickname}</h3>
-        </div>
-        <span
-          className="text-[10px] font-semibold tracking-wider px-2 py-1 rounded-md"
-          style={{
-            background: "rgba(255,191,0,0.15)",
-            color: "var(--brand-amber)",
-          }}
+      {/* header */}
+      <header className="relative flex items-center justify-between">
+        <div
+          className="flex items-center gap-2 px-2.5 py-1 rounded-full"
+          style={{ background: t.accentSoft }}
         >
-          {a.currency}
+          <Wallet className="w-3 h-3" style={{ color: t.accent }} />
+          <span
+            className="text-[10px] font-semibold tracking-[0.12em]"
+            style={{ color: t.accent }}
+          >
+            {a.currency}
+            {a.type ? ` · ${a.type.toUpperCase()}` : ""}
+          </span>
+        </div>
+        <span className="text-[11px] tabular-nums" style={{ color: t.ink, opacity: 0.5 }}>
+          {a.masked}
         </span>
       </header>
 
+      {/* balance */}
       <div className="relative">
-        <p className="text-[11px] text-white/50 mb-1">Available balance</p>
-        <p className="text-2xl font-semibold tracking-tight tabular-nums">
-          {hidden ? "•••• ••" : fmt(a.available, a.currency)}
+        <p className="text-[11px] mb-1.5" style={{ color: t.ink, opacity: 0.6 }}>
+          Available balance
         </p>
+        <div className="flex items-baseline gap-1">
+          <span
+            className="text-[15px] font-medium"
+            style={{ color: t.ink, opacity: 0.55 }}
+          >
+            {a.symbol}
+          </span>
+          <p
+            className="text-[28px] font-semibold tracking-tight tabular-nums leading-none"
+            style={{ color: t.ink }}
+          >
+            {hidden
+              ? "••••••"
+              : new Intl.NumberFormat("en-US", {
+                  minimumFractionDigits: 2,
+                }).format(a.available)}
+          </p>
+        </div>
       </div>
 
-      <footer className="relative flex items-center justify-between">
-        <span className="text-[12px] text-white/60 mono">{a.masked}</span>
+      {/* footer */}
+      <footer className="relative flex items-center justify-between mt-auto">
+        <div className="min-w-0">
+          <p
+            className="text-[10px] uppercase tracking-[0.14em]"
+            style={{ color: t.ink, opacity: 0.45 }}
+          >
+            {a.holder}
+          </p>
+          <p
+            className="text-[13px] font-medium truncate mt-0.5"
+            style={{ color: t.ink }}
+          >
+            {a.nickname}
+          </p>
+        </div>
         <button
-          aria-label="Open account"
-          className="w-8 h-8 rounded-full flex items-center justify-center bg-white/10 hover:bg-white/20 transition"
+          aria-label="Open wallet"
+          className="w-9 h-9 rounded-full flex items-center justify-center transition hover:scale-105"
+          style={{ background: t.accent, color: "white" }}
         >
           <ArrowUpRight className="w-4 h-4" />
         </button>
@@ -141,7 +213,7 @@ export function AccountsSection() {
       <div className="-mx-6 px-6 overflow-x-auto scrollbar-none">
         <div className="flex gap-4 pb-2">
           {accounts.map((a) => (
-            <AccountCard key={a.id} a={a} hidden={hidden} />
+            <WalletCard key={a.id} a={a} hidden={hidden} />
           ))}
         </div>
       </div>
