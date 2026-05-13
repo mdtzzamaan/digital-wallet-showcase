@@ -119,7 +119,7 @@ function WalletCard({ a, hidden }: { a: Account; hidden: boolean }) {
             className="text-[10px] font-semibold tracking-[0.12em]"
             style={{ color: t.accent }}
           >
-            {(a.type ?? "Wallet").toUpperCase()}
+            {(a.type ?? "Personal").toUpperCase()}
           </span>
         </div>
         <span className="text-[11px] tabular-nums" style={{ color: t.ink, opacity: 0.5 }}>
