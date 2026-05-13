@@ -11,7 +11,7 @@ type Account = {
   available: number;
   masked: string;
   type?: string;
-  theme: "indigo" | "emerald" | "amber";
+  theme: "indigo" | "noir" | "emerald";
 };
 
 const accounts: Account[] = [
@@ -24,7 +24,6 @@ const accounts: Account[] = [
     balance: 2180.31,
     available: 2180.31,
     masked: "•••• 7482",
-    type: "Personal",
     theme: "indigo",
   },
   {
@@ -37,7 +36,7 @@ const accounts: Account[] = [
     available: 31.01,
     masked: "•••• 0868",
     type: "Business",
-    theme: "emerald",
+    theme: "noir",
   },
   {
     id: "e50168f1",
@@ -48,7 +47,7 @@ const accounts: Account[] = [
     balance: 1131.0,
     available: 631.0,
     masked: "•••• 5935",
-    theme: "amber",
+    theme: "emerald",
   },
 ];
 
@@ -61,18 +60,18 @@ const themes = {
     mark: "oklch(0.42 0.18 270 / 0.08)",
   },
   emerald: {
-    bg: "linear-gradient(160deg, oklch(0.98 0.015 165) 0%, oklch(0.96 0.03 160) 100%)",
-    accent: "oklch(0.48 0.14 165)",
-    accentSoft: "oklch(0.92 0.06 165)",
-    ink: "oklch(0.24 0.05 165)",
-    mark: "oklch(0.48 0.14 165 / 0.08)",
+    bg: "linear-gradient(160deg, oklch(0.97 0.025 160) 0%, oklch(0.93 0.05 158) 100%)",
+    accent: "oklch(0.45 0.13 160)",
+    accentSoft: "oklch(0.9 0.06 160)",
+    ink: "oklch(0.24 0.06 160)",
+    mark: "oklch(0.45 0.13 160 / 0.1)",
   },
-  amber: {
-    bg: "linear-gradient(160deg, oklch(0.985 0.018 85) 0%, oklch(0.96 0.04 75) 100%)",
-    accent: "oklch(0.58 0.16 60)",
-    accentSoft: "oklch(0.94 0.06 80)",
-    ink: "oklch(0.28 0.06 60)",
-    mark: "oklch(0.58 0.16 60 / 0.09)",
+  noir: {
+    bg: "linear-gradient(160deg, oklch(0.22 0.01 270) 0%, oklch(0.14 0.012 270) 100%)",
+    accent: "oklch(0.92 0.005 270)",
+    accentSoft: "oklch(1 0 0 / 0.1)",
+    ink: "oklch(0.98 0 0)",
+    mark: "oklch(1 0 0 / 0.06)",
   },
 };
 
