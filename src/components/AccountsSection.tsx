@@ -120,8 +120,7 @@ function WalletCard({ a, hidden }: { a: Account; hidden: boolean }) {
             className="text-[10px] font-semibold tracking-[0.12em]"
             style={{ color: t.accent }}
           >
-            {a.currency}
-            {a.type ? ` · ${a.type.toUpperCase()}` : ""}
+            {(a.type ?? "Wallet").toUpperCase()}
           </span>
         </div>
         <span className="text-[11px] tabular-nums" style={{ color: t.ink, opacity: 0.5 }}>
@@ -158,13 +157,7 @@ function WalletCard({ a, hidden }: { a: Account; hidden: boolean }) {
       <footer className="relative flex items-center justify-between mt-auto">
         <div className="min-w-0">
           <p
-            className="text-[10px] uppercase tracking-[0.14em]"
-            style={{ color: t.ink, opacity: 0.45 }}
-          >
-            {a.holder}
-          </p>
-          <p
-            className="text-[13px] font-medium truncate mt-0.5"
+            className="text-[13px] font-medium truncate"
             style={{ color: t.ink }}
           >
             {a.nickname}
